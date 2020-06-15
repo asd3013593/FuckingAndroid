@@ -11,20 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-/*public class CostListData {
-    static int a = 3;
-    static String Price;
-    static void SaveData(String price)
-    {
-        Price = price;
-    }
-    static LinkedList<CostList> costLists;
-    static LinkedList<CostList> getCostLists() {return costLists;}
-    static int GetA(){return  a;}
-    static {
-        costLists = new LinkedList<CostList>();
-        costLists.add(new CostList(Price));
-    }*/
 public class CostListData implements Serializable {
     private static final long serialVersionUID = -7060210544600464481L;
     static LinkedList<CostList> array = new LinkedList<CostList>();

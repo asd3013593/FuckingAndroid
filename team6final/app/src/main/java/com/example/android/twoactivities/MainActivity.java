@@ -83,25 +83,32 @@ public class MainActivity extends AppCompatActivity {
     public void launchExpendActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
         Intent intent = new Intent(this, ExpendActivity.class);
-        startActivityForResult(intent, TEXT_REQUEST);
+        startActivityForResult(intent, 123);
     }
 
     public void launchIncomeActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
         Intent intent = new Intent(this, IncomeActivity.class);
-        startActivityForResult(intent, TEXT_REQUEST);
+        startActivityForResult(intent, 456);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        CostListData costListData = new CostListData();
-        costListData = (CostListData)data.getSerializableExtra("CostListData");
         Data = "";
-        Price = "";
-        Kind = "";
+        CostListData costListData = new CostListData();
+        IncomeListData incomeListData = new IncomeListData();
+        if(requestCode == 123) {
+            costListData = (CostListData) data.getSerializableExtra("CostListData");
+        }
+        if(requestCode == 456) {
+            incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
+        }
         for(int i =0 ;i <costListData.getArray().size();i++) {
             Data += costListData.getArray().get(i).Kind+ " "+costListData.getArray().get(i).Price + "\n";
+        }
+        for(int i =0 ;i <incomeListData.getArray().size();i++) {
+            Data += incomeListData.getArray().get(i).Kind+ " "+incomeListData.getArray().get(i).Price + "\n";
         }
         costData.setText(Data);
     }

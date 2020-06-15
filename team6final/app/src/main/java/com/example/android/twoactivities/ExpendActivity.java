@@ -47,7 +47,6 @@ public class ExpendActivity extends AppCompatActivity {
             costListData.SaveData(Kind, price.getText().toString());
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
-            intent.putExtra(EXTRA_REPLY, "123");
             Bundle bundle = new Bundle();
             bundle.putSerializable("CostListData", costListData);
             intent.putExtras(bundle);
