@@ -29,4 +29,10 @@
         <item>３Ｃ用品</item>
         <item>生活用品</item>
     </array>
+    <array name="incomedarray">
+        <item>工作收入</item>
+        <item>其他收入</item>
+        <item>生活費</item>
+        <item>中獎</item>
+    </array>
 </resources>

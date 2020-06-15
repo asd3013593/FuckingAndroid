@@ -17,24 +17,13 @@
 package com.example.android.twoactivities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.LinkedList;
 
 /**
  * The TwoActivities app contains two activities and sends messages
@@ -91,24 +80,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void launchSecondActivity(View view) {
+    public void launchExpendActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
-        Intent intent = new Intent(this, SecondActivity.class);
+        Intent intent = new Intent(this, ExpendActivity.class);
+        startActivityForResult(intent, TEXT_REQUEST);
+    }
+
+    public void launchIncomeActivity(View view) {
+        Log.d(LOG_TAG, "Button clicked!");
+        Intent intent = new Intent(this, IncomeActivity.class);
         startActivityForResult(intent, TEXT_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-           CostListData costListData = new CostListData();
-           costListData = (CostListData)data.getSerializableExtra("CostListData");
-           Data = "";
-           Price = "";
-           Kind = "";
-           for(int i =0 ;i <costListData.getArray().size();i++) {
-                Data += costListData.getArray().get(i).Kind+ " "+costListData.getArray().get(i).Price + "\n";
-           }
-            costData.setText(Data);
+        CostListData costListData = new CostListData();
+        costListData = (CostListData)data.getSerializableExtra("CostListData");
+        Data = "";
+        Price = "";
+        Kind = "";
+        for(int i =0 ;i <costListData.getArray().size();i++) {
+            Data += costListData.getArray().get(i).Kind+ " "+costListData.getArray().get(i).Price + "\n";
         }
+        costData.setText(Data);
     }
+}
 

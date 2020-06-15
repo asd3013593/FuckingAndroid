@@ -25,8 +25,8 @@
 
     <CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="424dp"
-        android:layout_height="323dp"
+        android:layout_width="409dp"
+        android:layout_height="356dp"
         android:layout_marginTop="64dp"
         android:firstDayOfWeek="3"
         android:shownWeekCount="4"
@@ -38,18 +38,18 @@
         android:id="@+id/text_message_reply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="416dp" />
+        tools:layout_editor_absoluteY="25dp" />
 
     <Button
         android:id="@+id/button_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:onClick="launchSecondActivity"
+        android:onClick="launchExpendActivity"
         android:text="支出"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.271"
@@ -59,13 +59,13 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="343dp"
-        android:layout_height="226dp"
-        android:layout_marginTop="28dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="92dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
             android:id="@+id/CostData"
@@ -81,6 +81,7 @@
         android:layout_marginStart="104dp"
         android:layout_marginLeft="104dp"
         android:layout_marginTop="24dp"
+        android:onClick="launchIncomeActivity"
         android:text="收入"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
