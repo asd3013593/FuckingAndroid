@@ -19,62 +19,60 @@ package com.example.android.twoactivities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * SecondActivity defines the second activity in the app. It is
- * launched from an intent with a message, and sends an intent
- * back with a second message.
- */
+import java.nio.file.WatchEvent;
+
 public class SecondActivity extends AppCompatActivity {
-    // Unique tag for the intent reply.
     public static final String EXTRA_REPLY =
             "com.example.android.twoactivities.extra.REPLY";
-
-    // EditText for the reply.
-    private EditText mReply;
-
-    /**
-     * Initializes the activity.
-     *
-     * @param savedInstanceState The current state data
-     */
+    private EditText price;
+    private Spinner costedKind;
+    private CostListData costListData = new CostListData();
+    private String[] kind;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-
-        // Initialize view variables.
-        mReply = findViewById(R.id.editText_money);
-
-        // Get the intent that launched this activity, and the message in
-        // the intent extra.
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-        // Put that message into the text_message TextView
-        TextView textView = findViewById(R.id.text_message);
-        textView.setText(message);
+        price = findViewById(R.id.editText_money);
+        costedKind = (Spinner)findViewById(R.id.CostedKind);
+        kind = getResources().getStringArray(R.array.costedarray);
     }
 
-    /**
-     * Handles the onClick for the "Reply" button. Gets the message from the
-     * second EditText, creates an intent, and returns that message back to
-     * the main activity.
-     *
-     * @param view The view (Button) that was clicked.
-     */
-    public void returnReply(View view) {
-        // Get the reply message from the edit text.
-        String reply = mReply.getText().toString();
-
-        // Create a new intent for the reply, add the reply message to it
-        // as an extra, set the intent result, and close the activity.
-        Intent replyIntent = new Intent();
-        replyIntent.putExtra(EXTRA_REPLY, reply);
-        setResult(RESULT_OK, replyIntent);
-        finish();
+    public void SaveData(View view) {
+        String Kind = kind[costedKind.getSelectedItemPosition()];
+        String Price = price.getText().toString();
+        if(isNumeric(Price) == 0) {
+            costListData.SaveData(Kind, price.getText().toString());
+            Intent intent = new Intent();
+            intent.setClass(this, MainActivity.class);
+            intent.putExtra(EXTRA_REPLY, "123");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("CostListData", costListData);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            SecondActivity.this.finish();
+        }
+        else if (isNumeric(Price) == 1)
+           Toast.makeText(this,"請輸入金額",Toast.LENGTH_LONG).show();
+        else if (isNumeric(Price) == 2)
+            Toast.makeText(this,"請輸入正確金額",Toast.LENGTH_LONG).show();
+    }
+    public static int isNumeric(String str){
+        if(str.length() == 0)
+            return 1;
+        for (int i = str.length();--i>=0;){
+            if (!Character.isDigit(str.charAt(i))){
+                return 2;
+            }
+        }
+        return 0;
     }
 }

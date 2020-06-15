@@ -17,12 +17,24 @@
 package com.example.android.twoactivities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 
 /**
  * The TwoActivities app contains two activities and sends messages
@@ -43,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mReplyHeadTextView;
     // TextView for the reply body
     private TextView mReplyTextView;
-
+    private Button schedule,costList;
+    private TextView costData;
+    String Price,Kind,Data;
     /**
      * Initializes the activity.
      *
@@ -55,51 +69,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize all the view variables.
-        mMessageEditText = findViewById(R.id.editText_main);
-        mReplyHeadTextView = findViewById(R.id.text_header_reply);
+        //mReplyHeadTextView = findViewById(R.id.text_header_reply);
         mReplyTextView = findViewById(R.id.text_message_reply);
+        schedule = findViewById(R.id.button2);
+        costList = findViewById(R.id.button5);
+        costData = findViewById(R.id.CostData);
+        schedule.setSelected(true);
+        schedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                schedule.setSelected(true);
+                costList.setSelected(false);
+            }
+        });
+        costList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                schedule.setSelected(false);
+                costList.setSelected(true);
+            }
+        });
     }
 
-    /**
-     * Handles the onClick for the "Send" button. Gets the value of the main EditText,
-     * creates an intent, and launches the second activity with that intent.
-     *
-     * The return intent from the second activity is onActivityResult().
-     *
-     * @param view The view (Button) that was clicked.
-     */
     public void launchSecondActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
         Intent intent = new Intent(this, SecondActivity.class);
-        String message = mMessageEditText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
         startActivityForResult(intent, TEXT_REQUEST);
     }
 
-    /**
-     * Handles the data in the return intent from SecondActivity.
-     *
-     * @param requestCode Code for the SecondActivity request.
-     * @param resultCode Code that comes back from SecondActivity.
-     * @param data Intent data sent back from SecondActivity.
-     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Test for the right intent reply.
-        if (requestCode == TEXT_REQUEST) {
-            // Test to make sure the intent reply result was good.
-            if (resultCode == RESULT_OK) {
-                String reply = data.getStringExtra(SecondActivity.EXTRA_REPLY);
-
-                // Make the reply head visible.
-                mReplyHeadTextView.setVisibility(View.VISIBLE);
-
-                // Set the reply and make it visible.
-                mReplyTextView.setText(reply);
-                mReplyTextView.setVisibility(View.VISIBLE);
-            }
+           CostListData costListData = new CostListData();
+           costListData = (CostListData)data.getSerializableExtra("CostListData");
+           Data = "";
+           Price = "";
+           Kind = "";
+           for(int i =0 ;i <costListData.getArray().size();i++) {
+                Data += costListData.getArray().get(i).Kind+ " "+costListData.getArray().get(i).Price + "\n";
+           }
+            costData.setText(Data);
         }
     }
-}
+

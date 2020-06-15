@@ -41,7 +41,7 @@
         </activity>
         <activity
             android:name="com.example.android.twoactivities.SecondActivity"
-            android:label="Second Activity"
+            android:label="支出"
             android:parentActivityName="com.example.android.twoactivities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
