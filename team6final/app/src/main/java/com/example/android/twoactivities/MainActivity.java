@@ -17,6 +17,7 @@
 package com.example.android.twoactivities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,10 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
- * The TwoActivities app contains two activities and sends messages
- * (intents) between them.
- */
+
+
 public class MainActivity extends AppCompatActivity {
     // Class name for Log tag
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -45,13 +44,12 @@ public class MainActivity extends AppCompatActivity {
     // TextView for the reply body
     private TextView mReplyTextView;
     private Button schedule,costList;
-    private TextView costData;
-    String Price,Kind,Data;
-    /**
-     * Initializes the activity.
-     *
-     * @param savedInstanceState The current state data.
-     */
+    private TextView Datalist;
+    String Price,Kind,Data,costdata,incomedata;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         mReplyTextView = findViewById(R.id.text_message_reply);
         schedule = findViewById(R.id.button2);
         costList = findViewById(R.id.button5);
-        costData = findViewById(R.id.CostData);
+        Datalist = findViewById(R.id.datalist);
         schedule.setSelected(true);
         schedule.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchExpendActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
-        Intent intent = new Intent(this, ExpendActivity.class);
+        Intent intent = new Intent(this, CostActivity.class);
         startActivityForResult(intent, 123);
     }
 
@@ -105,12 +103,17 @@ public class MainActivity extends AppCompatActivity {
             incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
         }
         for(int i =0 ;i <costListData.getArray().size();i++) {
-            Data += costListData.getArray().get(i).Kind+ " "+costListData.getArray().get(i).Price + "\n";
+            int j = Integer.parseInt(costListData.getArray().get(i).Price);
+            String s = String.valueOf(j);
+            Data += costListData.getArray().get(i).Kind+ "  -$"+ j + "\n";
+            Datalist.setTextColor(Color.rgb(255, 0, 0));
         }
         for(int i =0 ;i <incomeListData.getArray().size();i++) {
-            Data += incomeListData.getArray().get(i).Kind+ " "+incomeListData.getArray().get(i).Price + "\n";
+            int j = Integer.parseInt(incomeListData.getArray().get(i).Price);
+            String s = String.valueOf(j);
+            Data += incomeListData.getArray().get(i).Kind+ "  +$"+ j + "\n";
+            Datalist.setTextColor(Color.rgb(0, 0, 255));
         }
-        costData.setText(Data);
+        Datalist.setText(Data);
     }
 }
-
