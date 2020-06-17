@@ -28,7 +28,7 @@
         android:layout_width="409dp"
         android:layout_height="356dp"
         android:layout_marginTop="64dp"
-        android:firstDayOfWeek="3"
+        android:firstDayOfWeek="1"
         android:shownWeekCount="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
         app:layout_constraintVertical_bias="1.0">
 
         <TextView
-            android:id="@+id/CostData"
+            android:id="@+id/datalist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
