@@ -21,8 +21,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -46,26 +49,17 @@ public class MainActivity extends AppCompatActivity {
     // TextView for the reply header
     private TextView mReplyHeadTextView;
     // TextView for the reply body
-    private TextView mReplyTextView;
-    private Button schedule,costList;
-//    private TextView Datalist;
-    String Price,Kind;  //,Data,costdata,incomedata
+    private TextView mReplyTextView,moneytextview;
+    private ListView mListView;
+    private Button schedule, costList;
+    //    private TextView Datalist;
+    String Price, Kind;  //,Data,costdata,incomedata
     private ListAdapter adapter;
-    private ListView listView;
-    private TextView text_tip;
-    int totalmoney = 0;
-    String[] cash = new String[]{};
-    ArrayList<String> kind = new ArrayList<String>();
-//    String[] kind = new String[]{
-//            "fuck1",
-//            "fuck2",
-//            "fuck3",
-//            "fuck2",
-//            "fuck3",
-//            "fuck2",
-//            "fuck3"
-//    };
-    //ArrayList<String> kind = new ArrayList<String>();
+    private ListView mlistView;
+    int totalmoney,costnum,incomenum = 0;
+    ArrayList<String> kindarray = new ArrayList<String>();
+    ArrayList<String> moneyarray = new ArrayList<String>();
+    ArrayList<Integer> color = new ArrayList<Integer>(); //0 == red,1 == blue;
 
 
     @Override
@@ -74,18 +68,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-//        kind.add("fuck");
-        listView = (ListView) findViewById(R.id.listView);
-        //使用ListAdapter來顯示你輸入的文字
-//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-//        //設定選擇的模式
-        adapter = new ArrayAdapter<>(this , android.R.layout.simple_list_item_1 ,kind);
-        listView.setAdapter(adapter);
 
+
+        mListView = (ListView) findViewById(R.id.list);
+        mListView.setAdapter(new MyAdapter());
+
+        for(int i = 0;i<50;i++) {
+            String s = String.valueOf(i+1);
+            kindarray.add("測試" + s);
+            if (i % 2 == 0){
+                color.add(0);
+            }
+            else{
+                color.add(1);
+            }
+        }
 
         // Initialize all the view variables.
         //mReplyHeadTextView = findViewById(R.id.text_header_reply);
         mReplyTextView = findViewById(R.id.text_message_reply);
+        moneytextview = findViewById(R.id.Moneytextview);
         schedule = findViewById(R.id.button2);
         costList = findViewById(R.id.button5);
 //      Datalist = findViewById(R.id.datalist);
@@ -122,34 +124,124 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        Data = "";
+
+
+
         CostListData costListData = new CostListData();
         IncomeListData incomeListData = new IncomeListData();
-        if(requestCode == 123) {
+        if (requestCode == 123) {
             costListData = (CostListData) data.getSerializableExtra("CostListData");
         }
-        if(requestCode == 456) {
+        if (requestCode == 456) {
             incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
         }
-        for(int i =0 ;i <costListData.getArray().size();i++) {
+
+        String s1 = String.valueOf(costListData.getArray().size());
+        String s2 = String.valueOf(incomeListData.getArray().size());
+        mReplyTextView.setText(s2+","+s1);
+
+        if(costListData.getArray().size() != costnum){
+            int j = Integer.parseInt(costListData.getArray().get(costListData.getArray().size()-1).Price);
+            String s = String.valueOf(j);
+            kindarray.add(costListData.getArray().get(costListData.getArray().size()-1).Kind);
+            moneyarray.add(s);
+            color.add(0);
+            totalmoney -=j;
+            costnum += 1;
+        }
+        else if(incomeListData.getArray().size() != incomenum){
+            int j = Integer.parseInt(incomeListData.getArray().get(incomeListData.getArray().size()-1).Price);
+            String s = String.valueOf(j);
+            kindarray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Kind);
+            moneyarray.add(s);
+            color.add(1);
+            totalmoney +=j;
+            incomenum += 1;
+        }
+        String s3 = String.valueOf(totalmoney);
+        moneytextview.setText(s3);
+
+//        Intent intent = new Intent();
+//        intent.setClass(this, MyAdapter.class);
+//        intent.putExtra("money", totalmoney);
+//        startActivity(intent);
+
+
+/*        for (int i = 0; i < costListData.getArray().size(); i++) {
             int j = Integer.parseInt(costListData.getArray().get(i).Price);
             String s = String.valueOf(j);
-            kind.add(costListData.getArray().get(i).Kind+ "  -$" + j);
 
-            Log.d("kind",kind.get(1));
+
 //            Data += costListData.getArray().get(i).Kind+ "  -$"+ j + "\n";
 //            Datalist.setTextColor(Color.rgb(255, 0, 0));
         }
-        for(int i =0 ;i <incomeListData.getArray().size();i++) {
+        for (int i = 0; i < incomeListData.getArray().size(); i++) {
             int j = Integer.parseInt(incomeListData.getArray().get(i).Price);
             String s = String.valueOf(j);
-            kind.add(incomeListData.getArray().get(i).Kind+ "  +$"+ j);
-
 
 
 //            Data += incomeListData.getArray().get(i).Kind+ "  +$"+ j + "\n";
 //            Datalist.setTextColor(Color.rgb(0, 0, 255));
-        }
+        }*/
 //        Datalist.setText(Data);
-        adapter.no
+    }
+
+        public class MyAdapter extends BaseAdapter {
+            ArrayList<String> kindlist = kindarray;
+            ArrayList<String> moneylist = moneyarray;
+            ArrayList<Integer> colorlist = color;
+//            Intent intent = getIntent();
+//            int total = intent.getIntExtra("money", 0);
+            @Override
+            public int getCount() {
+                return kindlist.size() + moneylist.size();
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = convertView;
+                Holder holder;
+                int i = 0;
+                if (v == null) {
+                    v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.list_item, null);
+                    holder = new Holder();
+                    holder.text1 = (TextView) v.findViewById(R.id.text1);
+                    holder.text2 = (TextView) v.findViewById(R.id.text2);
+
+                    v.setTag(holder);
+                } else {
+                    holder = (Holder) v.getTag();
+                }
+
+                holder.text1.setText(kindlist.get(position));
+                holder.text1.setTextColor(Color.rgb(0, 0, 0));
+                if(colorlist.get(position) == 0){
+                    holder.text1.setTextColor(Color.RED);
+                }
+                else if(colorlist.get(position) == 1){
+                    holder.text1.setTextColor(Color.BLUE);
+                }
+//                switch (position) {
+//                    case 0:
+//                        holder.text1.setText(kindlist.get(0));
+//                        holder.text1.setTextColor(Color.rgb(255, 0, 0));
+//                        break;
+//                    case 1:
+//                        holder.text1.setText("monkey");
+//                        holder.text1.setTextColor(Color.rgb(0, 0, 255));
+//                        break;
+//                }
+                return v;
+            }
     }
 }
