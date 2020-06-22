@@ -54,9 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private Button schedule, costList;
     //    private TextView Datalist;
     String Price, Kind;  //,Data,costdata,incomedata
-    private ListAdapter adapter;
-    private ListView mlistView;
-    int totalmoney,costnum,incomenum = 0;
+    private MyAdapter adapter;
+    int totalmoney,incomenum,costnum = 0;
     ArrayList<String> kindarray = new ArrayList<String>();
     ArrayList<String> moneyarray = new ArrayList<String>();
     ArrayList<Integer> color = new ArrayList<Integer>(); //0 == red,1 == blue;
@@ -73,16 +72,6 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
 
-        for(int i = 0;i<50;i++) {
-            String s = String.valueOf(i+1);
-            kindarray.add("測試" + s);
-            if (i % 2 == 0){
-                color.add(0);
-            }
-            else{
-                color.add(1);
-            }
-        }
 
         // Initialize all the view variables.
         //mReplyHeadTextView = findViewById(R.id.text_header_reply);
@@ -160,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         }
         String s3 = String.valueOf(totalmoney);
         moneytextview.setText(s3);
+        mListView.setAdapter(new MyAdapter());
+
 
 //        Intent intent = new Intent();
 //        intent.setClass(this, MyAdapter.class);
@@ -192,9 +183,19 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<Integer> colorlist = color;
 //            Intent intent = getIntent();
 //            int total = intent.getIntExtra("money", 0);
+
+
+//            public void add(String kind,String money,Integer color) {
+//                kindlist.add(kind);
+//                moneylist.add(money);
+//                colorlist.add(color);
+//                notifyDataSetChanged();
+//            }
+
+
             @Override
             public int getCount() {
-                return kindlist.size() + moneylist.size();
+                return kindlist.size();
             }
 
             @Override
@@ -224,12 +225,15 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 holder.text1.setText(kindlist.get(position));
-                holder.text1.setTextColor(Color.rgb(0, 0, 0));
                 if(colorlist.get(position) == 0){
                     holder.text1.setTextColor(Color.RED);
+                    holder.text2.setText("-$"+moneylist.get(position));
+                    holder.text2.setTextColor(Color.BLACK);
                 }
                 else if(colorlist.get(position) == 1){
                     holder.text1.setTextColor(Color.BLUE);
+                    holder.text2.setText("+$"+moneylist.get(position));
+                    holder.text2.setTextColor(Color.BLACK);
                 }
 //                switch (position) {
 //                    case 0:
