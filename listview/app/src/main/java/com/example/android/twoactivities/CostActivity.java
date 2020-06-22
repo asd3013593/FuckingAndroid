@@ -29,16 +29,19 @@ public class CostActivity extends AppCompatActivity {
             "com.example.android.twoactivities.extra.REPLY";
     private EditText price;
     private Spinner costKind;
+    private Spinner accountKind;
     private CostListData costListData = new CostListData();
     private String[] kind;
-
+    private String[] account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cost);
         price = findViewById(R.id.editText_money);
         costKind = (Spinner)findViewById(R.id.CostedKind);
+        accountKind = (Spinner)findViewById(R.id.accountKind);
         kind = getResources().getStringArray(R.array.costedarray);
+        account = getResources().getStringArray(R.array.accountArray);
     }
 
     public static int isNumeric(String str){
@@ -53,10 +56,11 @@ public class CostActivity extends AppCompatActivity {
     }
 
     public void SaveCostData(View view) {
+        String Account = account[accountKind.getSelectedItemPosition()];
         String Kind = kind[costKind.getSelectedItemPosition()];
         String Price = price.getText().toString();
         if(isNumeric(Price) == 0) {
-            costListData.SaveData(Kind, price.getText().toString());
+            costListData.SaveData(Kind, price.getText().toString(),Account);
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
             intent.putExtra("CostListData", costListData);

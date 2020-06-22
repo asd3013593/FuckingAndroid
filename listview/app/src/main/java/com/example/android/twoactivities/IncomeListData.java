@@ -15,9 +15,8 @@ public class IncomeListData implements Serializable {
     private static final long serialVersionUID = -7060210544600464481L;
     static ArrayList<IncomeList> array = new ArrayList<IncomeList>();
     public ArrayList<IncomeList>getArray() {return array;}
-    public void SaveData(String kind,String price)
-    {
-        array.add(new IncomeList(kind,price));
+    public void SaveData(String kind,String price,String account) {
+        array.add(new IncomeList(kind,price,account));
     }
     public IncomeListData ReturnThis() {
         return this;

@@ -35,4 +35,9 @@
         <item>生活費</item>
         <item>中獎</item>
     </array>
+    <array name="accountArray">
+        <item>現金</item>
+        <item>銀行</item>
+        <item>信用卡</item>
+    </array>
 </resources>
