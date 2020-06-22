@@ -13,8 +13,8 @@ import java.util.LinkedList;
 
 public class IncomeListData implements Serializable {
     private static final long serialVersionUID = -7060210544600464481L;
-    static LinkedList<IncomeList> array = new LinkedList<IncomeList>();
-    public LinkedList<IncomeList>getArray() {return array;}
+    static ArrayList<IncomeList> array = new ArrayList<IncomeList>();
+    public ArrayList<IncomeList>getArray() {return array;}
     public void SaveData(String kind,String price)
     {
         array.add(new IncomeList(kind,price));
