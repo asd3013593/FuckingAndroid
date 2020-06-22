@@ -130,11 +130,9 @@ public class MainActivity extends AppCompatActivity {
         accountArray = gson.fromJson(accountJson,type3);
         if(kindArray == null){
             kindArray = new ArrayList<String>();
-            Log.d("Load", "2323");
         }
         if(moneyArray == null){
             moneyArray = new ArrayList<String>();
-            Log.d("Load", "1233");
         }
         if(color == null){
             color = new ArrayList<Integer>();
