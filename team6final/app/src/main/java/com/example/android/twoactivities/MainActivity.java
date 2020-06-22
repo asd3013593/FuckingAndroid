@@ -17,6 +17,7 @@
 package com.example.android.twoactivities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,24 +28,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
 public class MainActivity extends AppCompatActivity {
-    // Class name for Log tag
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    // Unique tag required for the intent extra
     public static final String EXTRA_MESSAGE
             = "com.example.android.twoactivities.extra.MESSAGE";
-    // Unique tag for the intent reply
     public static final int TEXT_REQUEST = 1;
-
-    // EditText view for the message
     private EditText mMessageEditText;
-    // TextView for the reply header
     private TextView mReplyHeadTextView;
-    // TextView for the reply body
     private TextView mReplyTextView;
     private Button schedule,costList;
     private TextView Datalist;
+    private CostListData costListData;
+    private IncomeListData incomeListData;
+    private SharedPreferences mPreferences;
     String Price,Kind,Data,costdata,incomedata;
 
 
@@ -57,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize all the view variables.
         //mReplyHeadTextView = findViewById(R.id.text_header_reply);
+
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
         mReplyTextView = findViewById(R.id.text_message_reply);
         schedule = findViewById(R.id.button2);
         costList = findViewById(R.id.button5);
         Datalist = findViewById(R.id.datalist);
+        CostListData costListData = new CostListData();
+        IncomeListData incomeListData = new IncomeListData();
         schedule.setSelected(true);
         schedule.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +76,23 @@ public class MainActivity extends AppCompatActivity {
                 costList.setSelected(true);
             }
         });
+        if (savedInstanceState != null) {
+            costListData = savedInstanceState.getSerializable("COUNT_KEY");
+            if (mCount != 0) {
+                mShowCountTextView.setText(String.format("%s", mCount));
+            }
+            mColor = savedInstanceState.getInt(COLOR_KEY);
+            mShowCountTextView.setBackgroundColor(mColor);
+        }
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        preferencesEditor.put(COUNT_KEY, mCount);
+        preferencesEditor.putInt(COLOR_KEY, mColor);
+        preferencesEditor.apply();
     }
 
     public void launchExpendActivity(View view) {
@@ -94,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Data = "";
-        CostListData costListData = new CostListData();
-        IncomeListData incomeListData = new IncomeListData();
         if(requestCode == 123) {
             costListData = (CostListData) data.getSerializableExtra("CostListData");
         }
