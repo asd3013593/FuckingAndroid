@@ -6,10 +6,11 @@ public class CostList {
     public String Kind;
     public String Price;
     public String Account;
-
-    public CostList(String kind,String price, String account) {
+    public String Remark;
+    public CostList(String kind,String price, String account, String remark) {
         this.Kind = kind;
         this.Price = price;
         this.Account = account;
+        this.Remark = remark;
     }
 }

@@ -15,7 +15,6 @@
  */
 
 package com.example.android.twoactivities;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +22,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 public class CostActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY =
             "com.example.android.twoactivities.extra.REPLY";
     private EditText price;
+    private EditText remark;
     private Spinner costKind;
     private Spinner accountKind;
     private CostListData costListData = new CostListData();
@@ -40,10 +39,10 @@ public class CostActivity extends AppCompatActivity {
         price = findViewById(R.id.editText_money);
         costKind = (Spinner)findViewById(R.id.CostedKind);
         accountKind = (Spinner)findViewById(R.id.accountKind);
+        remark = findViewById(R.id.remark);
         kind = getResources().getStringArray(R.array.costedarray);
         account = getResources().getStringArray(R.array.accountArray);
     }
-
     public static int isNumeric(String str){
         if(str.length() == 0)
             return 1;
@@ -54,19 +53,16 @@ public class CostActivity extends AppCompatActivity {
         }
         return 0;
     }
-
     public void SaveCostData(View view) {
         String Account = account[accountKind.getSelectedItemPosition()];
         String Kind = kind[costKind.getSelectedItemPosition()];
         String Price = price.getText().toString();
+        String Remark = remark.getText().toString();
         if(isNumeric(Price) == 0) {
-            costListData.SaveData(Kind, price.getText().toString(),Account);
+            costListData.SaveData(Kind, price.getText().toString(),Account,Remark);
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
             intent.putExtra("CostListData", costListData);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("CostListData", costListData);
-//            intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
             CostActivity.this.finish();
         }

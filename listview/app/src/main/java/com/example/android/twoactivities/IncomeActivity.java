@@ -13,6 +13,7 @@ public class IncomeActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY =
             "com.example.android.twoactivities.extra.REPLY";
     private EditText price;
+    private EditText remark;
     private Spinner incomeKind;
     private Spinner accountKind;
     private IncomeListData incomeListData = new IncomeListData();
@@ -26,6 +27,7 @@ public class IncomeActivity extends AppCompatActivity {
         incomeKind = (Spinner)findViewById(R.id.incomedKind);
         accountKind = (Spinner)findViewById(R.id.accountKind);
         kind = getResources().getStringArray(R.array.incomedarray);
+        remark = findViewById(R.id.remark);
         account = getResources().getStringArray(R.array.accountArray);
     }
 
@@ -33,8 +35,9 @@ public class IncomeActivity extends AppCompatActivity {
         String Kind = kind[incomeKind.getSelectedItemPosition()];
         String Price = price.getText().toString();
         String Account = account[accountKind.getSelectedItemPosition()];
+        String Remark = remark.getText().toString();
         if(isNumeric(Price) == 0) {
-            incomeListData.SaveData(Kind, Price, Account);
+            incomeListData.SaveData(Kind, Price, Account,Remark);
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
             intent.putExtra("IncomeListData",incomeListData);

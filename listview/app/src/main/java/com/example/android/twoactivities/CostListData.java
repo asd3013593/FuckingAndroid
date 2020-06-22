@@ -15,8 +15,8 @@ public class CostListData implements Serializable {
     private static final long serialVersionUID = -7060210544600464481L;
     static LinkedList<CostList> array = new LinkedList<CostList>();
     public LinkedList<CostList>getArray() {return array;}
-    public void SaveData(String kind,String price,String account) {
-        array.add(new CostList(kind,price,account));
+    public void SaveData(String kind,String price,String account,String remark) {
+        array.add(new CostList(kind,price,account,remark));
     }
     public CostListData ReturnThis() {
         return this;
