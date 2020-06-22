@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Thu Jun 18 03:48:08 GMT+08:00 2020
+0.baseType=DIRECTORY
+0.base=C\:\\Users\\user\\Desktop\\ANHUB\\team6final\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+0.path=classes.dex
+0.set=DEX
+count=1
