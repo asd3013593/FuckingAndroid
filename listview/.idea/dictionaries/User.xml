@@ -2,8 +2,14 @@
   <dictionary name="User">
     <words>
       <w>colorlist</w>
+      <w>costnum</w>
+      <w>incomenum</w>
+      <w>kindarray</w>
       <w>kindlist</w>
+      <w>moneyarray</w>
       <w>moneylist</w>
+      <w>moneytextview</w>
+      <w>totalmoney</w>
     </words>
   </dictionary>
 </component>

@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mReplyTextView,moneytextview;
     private ListView mListView;
     private Button schedule, costList;
-    //    private TextView Datalist;
-    String Price, Kind;  //,Data,costdata,incomedata
+    String Price, Kind;
     private MyAdapter adapter;
     int totalmoney,incomenum,costnum = 0;
     ArrayList<String> kindarray = new ArrayList<String>();
@@ -68,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
 
@@ -80,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         moneytextview = findViewById(R.id.Moneytextview);
         schedule = findViewById(R.id.button2);
         costList = findViewById(R.id.button5);
-//      Datalist = findViewById(R.id.datalist);
         schedule.setSelected(true);
         schedule.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,16 +198,6 @@ public class MainActivity extends AppCompatActivity {
                     holder.text2.setText("                              +$" + moneylist.get(position));
                     holder.text2.setTextColor(Color.BLUE);
                 }
-//                switch (position) {
-//                    case 0:
-//                        holder.text1.setText(kindlist.get(0));
-//                        holder.text1.setTextColor(Color.rgb(255, 0, 0));
-//                        break;
-//                    case 1:
-//                        holder.text1.setText("monkey");
-//                        holder.text1.setTextColor(Color.rgb(0, 0, 255));
-//                        break;
-//                }
                 return v;
             }
     }
