@@ -17,6 +17,7 @@
 package com.example.android.twoactivities;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,12 +29,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView mReplyTextView,moneytextview;
     private ListView mListView;
     private Button schedule, costList;
-    String Price, Kind;
+    String curYear,curMonth,curDay,curDate;
     private MyAdapter adapter;
     int totalmoney,incomenum,costnum = 0;
+    private int mYear, mMonth, mDay;
     ArrayList<String> kindarray = new ArrayList<String>();
     ArrayList<String> moneyarray = new ArrayList<String>();
     ArrayList<Integer> color = new ArrayList<Integer>(); //0 == red,1 == blue;
@@ -65,6 +70,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                curYear = String.valueOf(year);
+                curMonth = String.valueOf(month+1);
+                curDay = String.valueOf(dayOfMonth);
+                curDate = curYear + curMonth + curDay;
+                Log.d("today",curDate);
+            }
+        });
+
+
+
+
+
+
 
 
         mListView = (ListView) findViewById(R.id.list);
@@ -151,13 +174,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
         public class MyAdapter extends BaseAdapter {
-            ArrayList<String> kindlist = kindarray;
-            ArrayList<String> moneylist = moneyarray;
-            ArrayList<Integer> colorlist = color;
 
             @Override
             public int getCount() {
-                return kindlist.size();
+                return kindarray.size();
             }
 
             @Override
@@ -187,15 +207,15 @@ public class MainActivity extends AppCompatActivity {
                     holder = (Holder) v.getTag();
                 }
 
-                holder.text1.setText(kindlist.get(position));
-                if(colorlist.get(position) == 0){
+                holder.text1.setText(kindarray.get(position));
+                if(color.get(position) == 0){
                     holder.text1.setTextColor(Color.RED);
-                    holder.text2.setText("                               -$" + moneylist.get(position));
+                    holder.text2.setText("-$" + moneyarray.get(position));
                     holder.text2.setTextColor(Color.RED);
                 }
-                else if(colorlist.get(position) == 1){
+                else if(color.get(position) == 1){
                     holder.text1.setTextColor(Color.BLUE);
-                    holder.text2.setText("                              +$" + moneylist.get(position));
+                    holder.text2.setText("                              +$" + moneyarray.get(position));
                     holder.text2.setTextColor(Color.BLUE);
                 }
                 return v;
