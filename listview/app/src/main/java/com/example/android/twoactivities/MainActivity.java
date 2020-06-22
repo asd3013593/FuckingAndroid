@@ -16,6 +16,7 @@
 
 package com.example.android.twoactivities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -151,47 +152,12 @@ public class MainActivity extends AppCompatActivity {
         moneytextview.setText(s3);
         mListView.setAdapter(new MyAdapter());
 
-
-//        Intent intent = new Intent();
-//        intent.setClass(this, MyAdapter.class);
-//        intent.putExtra("money", totalmoney);
-//        startActivity(intent);
-
-
-/*        for (int i = 0; i < costListData.getArray().size(); i++) {
-            int j = Integer.parseInt(costListData.getArray().get(i).Price);
-            String s = String.valueOf(j);
-
-
-//            Data += costListData.getArray().get(i).Kind+ "  -$"+ j + "\n";
-//            Datalist.setTextColor(Color.rgb(255, 0, 0));
-        }
-        for (int i = 0; i < incomeListData.getArray().size(); i++) {
-            int j = Integer.parseInt(incomeListData.getArray().get(i).Price);
-            String s = String.valueOf(j);
-
-
-//            Data += incomeListData.getArray().get(i).Kind+ "  +$"+ j + "\n";
-//            Datalist.setTextColor(Color.rgb(0, 0, 255));
-        }*/
-//        Datalist.setText(Data);
     }
 
         public class MyAdapter extends BaseAdapter {
             ArrayList<String> kindlist = kindarray;
             ArrayList<String> moneylist = moneyarray;
             ArrayList<Integer> colorlist = color;
-//            Intent intent = getIntent();
-//            int total = intent.getIntExtra("money", 0);
-
-
-//            public void add(String kind,String money,Integer color) {
-//                kindlist.add(kind);
-//                moneylist.add(money);
-//                colorlist.add(color);
-//                notifyDataSetChanged();
-//            }
-
 
             @Override
             public int getCount() {
@@ -208,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 return 0;
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = convertView;
@@ -227,13 +194,13 @@ public class MainActivity extends AppCompatActivity {
                 holder.text1.setText(kindlist.get(position));
                 if(colorlist.get(position) == 0){
                     holder.text1.setTextColor(Color.RED);
-                    holder.text2.setText("-$"+moneylist.get(position));
-                    holder.text2.setTextColor(Color.BLACK);
+                    holder.text2.setText("                               -$" + moneylist.get(position));
+                    holder.text2.setTextColor(Color.RED);
                 }
                 else if(colorlist.get(position) == 1){
                     holder.text1.setTextColor(Color.BLUE);
-                    holder.text2.setText("+$"+moneylist.get(position));
-                    holder.text2.setTextColor(Color.BLACK);
+                    holder.text2.setText("                              +$" + moneylist.get(position));
+                    holder.text2.setTextColor(Color.BLUE);
                 }
 //                switch (position) {
 //                    case 0:
