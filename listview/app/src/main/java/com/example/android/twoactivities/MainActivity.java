@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -54,44 +55,57 @@ public class MainActivity extends AppCompatActivity {
     private TextView mReplyTextView,moneytextview;
     private ListView mListView;
     private Button schedule, costList;
-    String Price, Kind;
+    String curYear,curMonth,curDay,curDate;
     private MyAdapter adapter;
     int totalmoney,incomenum,costnum = 0;
+    boolean listbutton,calbutton;
     ArrayList<String> kindarray ;
     ArrayList<String> moneyarray;
     ArrayList<Integer> color = new ArrayList<Integer>(); //0 == red,1 == blue;
+    ArrayList<String> datearray = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listbutton = false;
+        calbutton = true;
         setContentView(R.layout.activity_main);
         loadData();
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
-//        ListAdapter listAdapter = new SimpleAdapter(
-//                this,
-//                android.R.layout.simple_list_item_2 ,
-//                new String[]{"title" , "text"} ,
-//                new int[]{android.R.id.text1 , android.R.id.text2});
+        CalendarView calendarView  = findViewById(R.id.calendarView);
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                curYear = String.valueOf(year);
+                curMonth = String.valueOf(month+1);
+                curDay = String.valueOf(dayOfMonth);
+                curDate = curYear + curMonth + curDay;
+                Log.d("Today",curDate);
+            }
+        });
+
         mReplyTextView = findViewById(R.id.text_message_reply);
         moneytextview = findViewById(R.id.Moneytextview);
         schedule = findViewById(R.id.button2);
         costList = findViewById(R.id.button5);
-        schedule.setSelected(true);
-        schedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                schedule.setSelected(true);
-                costList.setSelected(false);
-            }
-        });
-        costList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                schedule.setSelected(false);
-                costList.setSelected(true);
-            }
-        });
+
+//        schedule.setSelected(true);
+//        schedule.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                schedule.setSelected(true);
+//                costList.setSelected(false);
+//            }
+//        });
+//        costList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                schedule.setSelected(false);
+//                costList.setSelected(true);
+//            }
+//        });
     }
     public void SaveData(){
         Gson gson = new Gson();
@@ -150,6 +164,16 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 456);
     }
 
+    public void onlist(View view){
+        listbutton = true;
+        calbutton = false;
+    }
+
+    public void oncal(View view){
+        listbutton = false;
+        calbutton = true;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -174,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
             kindarray.add(costListData.getArray().get(costListData.getArray().size()-1).Kind);
             moneyarray.add(s);
             color.add(0);
+            datearray.add(curDate);
             totalmoney -=j;
             costnum += 1;
             SaveData();
@@ -184,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
             kindarray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Kind);
             moneyarray.add(s);
             color.add(1);
+            datearray.add(curDate);
             totalmoney +=j;
             incomenum += 1;
             SaveData();
@@ -192,10 +218,15 @@ public class MainActivity extends AppCompatActivity {
         moneytextview.setText(s3);
         mListView.setAdapter(new MyAdapter());
     }
+
+
+
+
+
+
+
         public class MyAdapter extends BaseAdapter {
-            //ArrayList<String> kindlist = kindarray;
-            //ArrayList<String> moneylist = moneyarray;
-            //ArrayList<Integer> colorlist = color;
+
             @Override
             public int getCount() {
                 return kindarray.size();
@@ -213,27 +244,45 @@ public class MainActivity extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = convertView;
                 Holder holder;
-                int i = 0;
+                int i = 0,newposition = 0;
                 if (v == null) {
                     v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.list_item, null);
                     holder = new Holder();
                     holder.text1 = (TextView) v.findViewById(R.id.text1);
                     holder.text2 = (TextView) v.findViewById(R.id.text2);
-
+                    holder.text3 = (TextView) v.findViewById(R.id.text3);
+                    holder.text4 = (TextView) v.findViewById(R.id.text4);
                     v.setTag(holder);
                 } else {
                     holder = (Holder) v.getTag();
                 }
-                holder.text1.setText(kindarray.get(position));
-                if(color.get(position) == 0){
-                    holder.text1.setTextColor(Color.RED);
-                    holder.text2.setText("-$" + moneyarray.get(position));
-                    holder.text2.setTextColor(Color.RED);
-                 }
-                else if(color.get(position) == 1){
-                    holder.text1.setTextColor(Color.BLUE);
-                    holder.text2.setText("+$" + moneyarray.get(position));
-                    holder.text2.setTextColor(Color.BLUE);
+                if(listbutton) {
+                    for(int j=0;j<kindarray.size();j++){
+                        if (datearray.get(j) == curDate){
+                            holder.text1.setText(kindarray.get(j));
+                            if (color.get(j) == 0) {
+                                holder.text1.setTextColor(Color.RED);
+                                holder.text2.setText("-$" + moneyarray.get(j));
+                                holder.text2.setTextColor(Color.RED);
+                            } else if (color.get(j) == 1) {
+                                holder.text1.setTextColor(Color.BLUE);
+                                holder.text2.setText("+$" + moneyarray.get(j));
+                                holder.text2.setTextColor(Color.BLUE);
+                            }
+                        }
+                    }
+                }
+                else if(calbutton){
+                    holder.text1.setText(kindarray.get(position));
+                    if (color.get(position) == 0) {
+                        holder.text1.setTextColor(Color.RED);
+                        holder.text2.setText("-$" + moneyarray.get(position));
+                        holder.text2.setTextColor(Color.RED);
+                    } else if (color.get(position) == 1) {
+                        holder.text1.setTextColor(Color.BLUE);
+                        holder.text2.setText("+$" + moneyarray.get(position));
+                        holder.text2.setTextColor(Color.BLUE);
+                    }
                 }
                 return v;
             }
