@@ -25,8 +25,8 @@
 
     <CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="462dp"
-        android:layout_height="327dp"
+        android:layout_width="412dp"
+        android:layout_height="319dp"
         android:layout_marginTop="64dp"
         android:firstDayOfWeek="1"
         android:shownWeekCount="4"
@@ -111,18 +111,18 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="407dp"
-        android:layout_height="237dp"
+        android:layout_width="383dp"
+        android:layout_height="240dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.73"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.852" />
+        app:layout_constraintVertical_bias="0.879" />
 
     <TextView
         android:id="@+id/Moneytextview"

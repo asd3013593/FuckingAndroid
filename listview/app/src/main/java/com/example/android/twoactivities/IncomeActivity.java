@@ -14,22 +14,27 @@ public class IncomeActivity extends AppCompatActivity {
             "com.example.android.twoactivities.extra.REPLY";
     private EditText price;
     private Spinner incomeKind;
+    private Spinner accountKind;
     private IncomeListData incomeListData = new IncomeListData();
     private String[] kind;
+    private String[] account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_income);
         price = findViewById(R.id.editText_money);
         incomeKind = (Spinner)findViewById(R.id.incomedKind);
+        accountKind = (Spinner)findViewById(R.id.accountKind);
         kind = getResources().getStringArray(R.array.incomedarray);
+        account = getResources().getStringArray(R.array.accountArray);
     }
 
     public void SaveIncomeData(View view) {
         String Kind = kind[incomeKind.getSelectedItemPosition()];
         String Price = price.getText().toString();
+        String Account = account[accountKind.getSelectedItemPosition()];
         if(isNumeric(Price) == 0) {
-            incomeListData.SaveData(Kind, price.getText().toString());
+            incomeListData.SaveData(Kind, Price, Account);
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
             intent.putExtra("IncomeListData",incomeListData);

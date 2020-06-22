@@ -7,13 +7,13 @@
     tools:context=".IncomeActivity">
 
     <Spinner
-        android:id="@+id/AccountKind"
+        android:id="@+id/accountKind"
         android:layout_width="228dp"
         android:layout_height="45dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
-        android:entries="@array/incomedarray"
+        android:entries="@array/accountArray"
         android:spinnerMode="dialog"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,7 @@
         android:spinnerMode="dialog"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AccountKind" />
+        app:layout_constraintTop_toBottomOf="@+id/accountKind" />
 
     <Button
         android:id="@+id/button_second"
@@ -96,8 +96,8 @@
         android:layout_marginTop="36dp"
         android:text="帳戶"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/AccountKind"
-        app:layout_constraintEnd_toStartOf="@+id/AccountKind"
+        app:layout_constraintBottom_toBottomOf="@+id/accountKind"
+        app:layout_constraintEnd_toStartOf="@+id/accountKind"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
