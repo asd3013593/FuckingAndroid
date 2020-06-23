@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int TEXT_REQUEST = 1;
     private EditText mMessageEditText;
     private TextView mReplyHeadTextView;
-    private TextView mReplyTextView,moneytextview,incometextview,costtextview;
+    private TextView moneytextview,incometextview,costtextview;
     private ListView mListView;
     private Button schedule, costList;
     int totalmoney,income,cost,incomenum,costnum = 0;
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         loadData();
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
-        mReplyTextView = findViewById(R.id.text_message_reply);
         incometextview = findViewById(R.id.income);
         costtextview = findViewById(R.id.cost);
         moneytextview = findViewById(R.id.Moneytextview);
@@ -194,9 +193,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 456) {
             incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
         }
-        String s1 = String.valueOf(costListData.getArray().size());
-        String s2 = String.valueOf(incomeListData.getArray().size());
-        mReplyTextView.setText(s2+","+s1);
         if(costListData.getArray().size() != costnum){
             int j = Integer.parseInt(costListData.getArray().get(costListData.getArray().size()-1).Price);
             String s = String.valueOf(j);
