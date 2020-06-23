@@ -231,9 +231,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        Data = "";
-//        Calendar c = Calendar.getInstance();
-//        int day = c.get(Calendar.DAY_OF_MONTH);
         CostListData costListData = new CostListData();
         IncomeListData incomeListData = new IncomeListData();
         if (requestCode == 123) {

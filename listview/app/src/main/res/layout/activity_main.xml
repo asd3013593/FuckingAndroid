@@ -25,13 +25,12 @@
 
     <CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="412dp"
-        android:layout_height="319dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="409dp"
+        android:layout_height="338dp"
+        android:layout_marginTop="16dp"
         android:firstDayOfWeek="1"
         android:shownWeekCount="4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
