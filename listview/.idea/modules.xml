@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="listview/app" />
-      <module fileurl="file://$PROJECT_DIR$/listview.iml" filepath="$PROJECT_DIR$/listview.iml" group="listview" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/listview.iml" filepath="$PROJECT_DIR$/listview.iml" />
     </modules>
   </component>
 </project>

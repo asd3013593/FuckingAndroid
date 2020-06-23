@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     // Class name for Log tag
@@ -47,21 +48,46 @@ public class MainActivity extends AppCompatActivity {
     private TextView moneytextview,incometextview,costtextview;
     private ListView mListView;
     private Button schedule, costList;
-    int totalmoney,income,cost,incomenum,costnum = 0;
-    String curYear,curMonth,curDay,curDate;
-    ArrayList<String> Date = new ArrayList<String>();
-    ArrayList<String> kindArray ;
-    ArrayList<String> moneyArray;
-    ArrayList<String> accountArray;
-    ArrayList<String> remarkArray;
-    ArrayList<String> dateArray;
-    ArrayList<Integer> colorArray ; //0 == red,1 == blue;
-
+    private Boolean sceduleDisplay = false;
+    private int totalmoney,income,cost,incomenum,costnum,index = 0;
+    private String curYear,curMonth,curDay,curDate;
+    private ArrayList<Integer> Date  ;
+    private ArrayList<String> kindArray ;
+    private ArrayList<String> moneyArray;
+    private ArrayList<String> accountArray;
+    private ArrayList<String> remarkArray;
+    private ArrayList<String> dateArray;
+    private ArrayList<Integer> colorArray ; //0 == red,1 == blue;
+    private CalendarView calendarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadData();
+        curDate = "2020623";
+        calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+
+                curYear = String.valueOf(year);
+                curMonth = String.valueOf(month + 1);
+                curDay = String.valueOf(dayOfMonth);
+                curDate = curYear + curMonth + curDay;
+                mListView = (ListView) findViewById(R.id.list);
+                index = 0;
+                Date = new ArrayList<Integer>();
+                for (int i = 0; i < kindArray.size(); i++) {
+                    if (dateArray.get(i).equals(curDate)) {
+                        index += 1;
+                        Date.add((i));
+                    }
+                }
+                mListView.setAdapter(new MyAdapter());
+            }
+        });
+        //Log.d("Today",curDate);
+
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
         incometextview = findViewById(R.id.income);
@@ -83,19 +109,9 @@ public class MainActivity extends AppCompatActivity {
         incometextview.setText("收入:" + Income);
         String Cost = String.valueOf(cost);
         costtextview.setText("支出:" + Cost);
-        final CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                curYear = String.valueOf(year);
-                curMonth = String.valueOf(month + 1);
-                curDay = String.valueOf(dayOfMonth);
-                curDate = curYear + curMonth + curDay;
-//                Log.d("Today",curDate);
-            }
-        });
+
     }
-    public void SaveData(){
+    public void  SaveData(){
         Gson gson = new Gson();
         SharedPreferences sharedPreferences = getSharedPreferences("kind",MODE_PRIVATE);
         SharedPreferences sharedPreferences1 = getSharedPreferences("money",MODE_PRIVATE);
@@ -103,29 +119,34 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences3 = getSharedPreferences("account",MODE_PRIVATE);
         SharedPreferences sharedPreferences4 = getSharedPreferences("remark",MODE_PRIVATE);
         SharedPreferences sharedPreferences5 = getSharedPreferences("total",MODE_PRIVATE);
+        SharedPreferences sharedPreferences6 = getSharedPreferences("date",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         SharedPreferences.Editor moneyEditor = sharedPreferences1.edit();
         SharedPreferences.Editor colorEditor = sharedPreferences2.edit();
         SharedPreferences.Editor accountEditor = sharedPreferences3.edit();
         SharedPreferences.Editor remarkEditor = sharedPreferences4.edit();
         SharedPreferences.Editor totalEditor = sharedPreferences5.edit();
+        SharedPreferences.Editor dateEditor = sharedPreferences6.edit();
         String json = gson.toJson(kindArray);
         String moneyJson = gson.toJson(moneyArray);
         String colorJson = gson.toJson(colorArray);
         String accountJson = gson.toJson(accountArray);
         String remarkJson = gson.toJson(remarkArray);
+        String dateJson = gson.toJson(dateArray);
         editor.putString("kind",json);
         moneyEditor.putString("money",moneyJson);
         colorEditor.putString("color",colorJson);
         accountEditor.putString("account",accountJson);
         remarkEditor.putString("remark",remarkJson);
         totalEditor.putInt("total",totalmoney);
+        dateEditor.putString("date",dateJson);
         editor.apply();
         moneyEditor.apply();
         colorEditor.apply();
         accountEditor.apply();
         remarkEditor.apply();
         totalEditor.commit();
+        dateEditor.apply();
     }
     public void  loadData(){
         Gson gson = new Gson();
@@ -135,22 +156,26 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences3 = getSharedPreferences("account",MODE_PRIVATE);
         SharedPreferences sharedPreferences4 = getSharedPreferences("remark",MODE_PRIVATE);
         SharedPreferences sharedPreferences5 = getSharedPreferences("total",MODE_PRIVATE);
+        SharedPreferences sharedPreferences6 = getSharedPreferences("date",MODE_PRIVATE);
         String json = sharedPreferences.getString("kind",null);
         String moneyJson = sharedPreferences1.getString("money",null);
         String colorJson = sharedPreferences2.getString("color",null);
         String accountJson = sharedPreferences3.getString("account",null);
         String remarkJson = sharedPreferences4.getString("remark",null);
+        String dateJson = sharedPreferences6.getString("date",null);
         Type type = new TypeToken<ArrayList<String>>(){}.getType();
         Type type1 = new TypeToken<ArrayList<String>>(){}.getType();
         Type type2 = new TypeToken<ArrayList<Integer>>(){}.getType();
         Type type3 = new TypeToken<ArrayList<String>>(){}.getType();
         Type type4 = new TypeToken<ArrayList<String>>(){}.getType();
+        Type type5 = new TypeToken<ArrayList<String>>(){}.getType();
         kindArray = gson.fromJson(json,type);
         moneyArray = gson.fromJson(moneyJson,type1);
         colorArray = gson.fromJson(colorJson,type2);
         accountArray = gson.fromJson(accountJson,type3);
         remarkArray = gson.fromJson(remarkJson,type4);
         totalmoney = sharedPreferences5.getInt("total",0);
+        dateArray = gson.fromJson(dateJson,type5);
         if(kindArray == null){
             kindArray = new ArrayList<String>();
         }
@@ -166,6 +191,10 @@ public class MainActivity extends AppCompatActivity {
         if(remarkArray == null){
             remarkArray = new ArrayList<String>();
         }
+        if(dateArray == null){
+            Log.d("qwe","qwe");
+            dateArray = new ArrayList<String>();
+        }
     }
     public void launchExpendActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
@@ -173,6 +202,14 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 123);
     }
 
+    public void setSchedule (View view){
+        sceduleDisplay = true;
+        mListView.setAdapter(new MyAdapter());
+    }
+    public void setScheduleList(View view){
+        sceduleDisplay = false;
+        mListView.setAdapter(new MyAdapter());
+    }
     public void launchIncomeActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
         Intent intent = new Intent(this, IncomeActivity.class);
@@ -194,12 +231,15 @@ public class MainActivity extends AppCompatActivity {
             incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
         }
         if(costListData.getArray().size() != costnum){
+            //Log.d("Today",curDate);
+            String dater = curDate;
+            Log.d("Today",dater);
             int j = Integer.parseInt(costListData.getArray().get(costListData.getArray().size()-1).Price);
             String s = String.valueOf(j);
             kindArray.add(costListData.getArray().get(costListData.getArray().size()-1).Kind);
             accountArray.add(costListData.getArray().get(costListData.getArray().size()-1).Account);
             remarkArray.add(costListData.getArray().get(costListData.getArray().size()-1).Remark);
-           // dateArray.add(curDate);
+            dateArray.add(dater);
             moneyArray.add(s);
             colorArray.add(0);
             totalmoney -=j;
@@ -212,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             kindArray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Kind);
             accountArray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Account);
             remarkArray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Remark);
-           // dateArray.add(curDate);
+            dateArray.add(curDate);
             moneyArray.add(s);
             colorArray.add(1);
             totalmoney +=j;
@@ -240,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
         public class MyAdapter extends BaseAdapter {
             @Override
             public int getCount() {
-                return kindArray.size();
+                if(!sceduleDisplay)return index;
+                else return kindArray.size();
             }
             @Override
             public Object getItem(int position) {
@@ -267,19 +308,36 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     holder = (Holder) v.getTag();
                 }
-                holder.text1.setText(kindArray.get(position));
-                holder.text3.setText(accountArray.get(position));
-                holder.text4.setText(remarkArray.get(position));
-                if(colorArray.get(position) == 0){
-                    holder.text1.setTextColor(Color.RED);
-                    holder.text2.setText("-$" + moneyArray.get(position));
-                    holder.text2.setTextColor(Color.RED);
-                 }
-                else if(colorArray.get(position) == 1){
-                    holder.text1.setTextColor(Color.BLUE);
-                    holder.text2.setText("+$" + moneyArray.get(position));
-                    holder.text2.setTextColor(Color.BLUE);
-                }
+
+                if (!sceduleDisplay) {
+                            Log.d("date",Integer.toString(Date.get(position)));
+                            holder.text1.setText(kindArray.get(Date.get(position)));
+                            holder.text3.setText(accountArray.get(Date.get(position)));
+                            holder.text4.setText(remarkArray.get(Date.get(position)));
+                               if (colorArray.get(Date.get(position)) == 0) {
+                                holder.text1.setTextColor(Color.RED);
+                                holder.text2.setText("-$" + moneyArray.get(Date.get(position)));
+                                holder.text2.setTextColor(Color.RED);
+                            } else if (colorArray.get(Date.get(position)) == 1) {
+                                holder.text1.setTextColor(Color.BLUE);
+                                holder.text2.setText("+$" + moneyArray.get(Date.get(position)));
+                                holder.text2.setTextColor(Color.BLUE);
+                            }
+              }
+                else {
+                    holder.text1.setText(kindArray.get(position));
+                    holder.text3.setText(accountArray.get(position));
+                    holder.text4.setText(remarkArray.get(position));
+                    if (colorArray.get(position) == 0) {
+                        holder.text1.setTextColor(Color.RED);
+                        holder.text2.setText("-$" + moneyArray.get(position));
+                        holder.text2.setTextColor(Color.RED);
+                    } else if (colorArray.get(position) == 1) {
+                        holder.text1.setTextColor(Color.BLUE);
+                        holder.text2.setText("+$" + moneyArray.get(position));
+                        holder.text2.setTextColor(Color.BLUE);
+                    }
+               }
                 return v;
             }
         }
