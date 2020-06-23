@@ -27,11 +27,11 @@
         android:id="@+id/calendarView"
         android:layout_width="412dp"
         android:layout_height="319dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:firstDayOfWeek="1"
         android:shownWeekCount="4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,37 +67,37 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="81dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginLeft="108dp"
+        android:layout_width="61dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginLeft="140dp"
         android:background="@drawable/hover"
-        android:text="行事曆"
         android:onClick="setScheduleList"
+        android:text="行事曆"
         android:textColor="@drawable/buttontext"
-        android:textSize="18sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/calendarView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.421" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="81dp"
-        android:layout_height="45dp"
+        android:layout_width="61dp"
+        android:layout_height="34dp"
         android:layout_marginEnd="124dp"
         android:layout_marginRight="124dp"
         android:background="@drawable/hover"
-        android:text="清單"
         android:onClick="setSchedule"
+        android:text="清單"
         android:textColor="@drawable/buttontext"
-        android:textSize="16sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/calendarView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/button2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.421" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ListView
         android:id="@+id/list"
@@ -133,6 +133,7 @@
         android:layout_width="167dp"
         android:layout_height="22dp"
         android:layout_marginBottom="36dp"
+        android:typeface="serif"
         app:layout_constraintBottom_toTopOf="@+id/list"
         app:layout_constraintEnd_toStartOf="@+id/Moneytextview"
         app:layout_constraintHorizontal_bias="0.411"
@@ -142,10 +143,11 @@
         android:id="@+id/cost"
         android:layout_width="167dp"
         android:layout_height="22dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintEnd_toStartOf="@+id/Moneytextview"
-        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintHorizontal_bias="0.411"
         app:layout_constraintStart_toStartOf="parent"
+        android:typeface="serif"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
 </android.support.constraint.ConstraintLayout>

@@ -12,6 +12,7 @@
         android:gravity="left"
         android:text="TextView"
         android:textSize="20dp"
+        android:typeface="serif"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,6 +25,7 @@
         android:gravity="right"
         android:text="TextView"
         android:textSize="20dp"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.988"
         app:layout_constraintStart_toEndOf="@+id/text1"

@@ -35,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     // Class name for Log tag
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadData();
-        curDate = "2020623";
+        curDate = "2020624";
+        SetIndex();
         calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -75,14 +77,15 @@ public class MainActivity extends AppCompatActivity {
                 curDay = String.valueOf(dayOfMonth);
                 curDate = curYear + curMonth + curDay;
                 mListView = (ListView) findViewById(R.id.list);
-                index = 0;
-                Date = new ArrayList<Integer>();
-                for (int i = 0; i < kindArray.size(); i++) {
-                    if (dateArray.get(i).equals(curDate)) {
-                        index += 1;
-                        Date.add((i));
-                    }
-                }
+                SetIndex();
+//                index = 0;
+//                Date = new ArrayList<Integer>();
+//                for (int i = 0; i < kindArray.size(); i++) {
+//                    if (dateArray.get(i).equals(curDate)) {
+//                        index += 1;
+//                        Date.add((i));
+//                    }
+//                }
                 mListView.setAdapter(new MyAdapter());
             }
         });
@@ -215,7 +218,16 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, IncomeActivity.class);
         startActivityForResult(intent, 456);
     }
-
+    public void SetIndex(){
+        index = 0;
+        Date = new ArrayList<Integer>();
+        for (int i = 0; i < kindArray.size(); i++) {
+            if (dateArray.get(i).equals(curDate)) {
+                index += 1;
+                Date.add((i));
+            }
+        }
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -244,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
             colorArray.add(0);
             totalmoney -=j;
             costnum += 1;
+            SetIndex();
             SaveData();
         }
         else if(incomeListData.getArray().size() != incomenum){
@@ -257,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
             colorArray.add(1);
             totalmoney +=j;
             incomenum += 1;
+            SetIndex();
             SaveData();
         }
         mListView.setAdapter(new MyAdapter());
