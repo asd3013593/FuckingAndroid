@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">記帳app</string>
+    <string name="app_name">記帳助理</string>
     <string name="button_main">+</string>
     <string name="editText_main">Enter Your Message Here</string>
     <string name="text_header">Message Received</string>
