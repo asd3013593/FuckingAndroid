@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 mListView.setAdapter(new MyAdapter());
             }
         });
-        //Log.d("Today",curDate);
-
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -119,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         costtextview.setText("支出:" + Cost);
 
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         //設定選單內容
@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         contextMenu.add(0, 2, 0, "綠茶");
         contextMenu.add(0, 3, 0, "青茶");
     }
+
 
     public void  SaveData(){
         Gson gson = new Gson();
@@ -220,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 123);
     }
     public void ShowListPage(View view){
-        sceduleDisplay = true;
         Intent intent = new Intent(this,ListActivity.class);
         intent.putStringArrayListExtra("kindArray",kindArray);
         intent.putStringArrayListExtra("moneyArray",moneyArray);

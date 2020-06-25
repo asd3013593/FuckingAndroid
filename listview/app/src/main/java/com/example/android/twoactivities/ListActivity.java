@@ -38,7 +38,6 @@ public class ListActivity extends AppCompatActivity {
         colorArray = intent.getIntegerArrayListExtra("colorArray");
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new ListActivity.MyAdapter());
-        Log.d("aaa",kindArray.get(0));
     }
     public class MyAdapter extends BaseAdapter {
         @Override
