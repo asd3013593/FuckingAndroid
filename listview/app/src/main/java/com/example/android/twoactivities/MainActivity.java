@@ -21,15 +21,19 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -65,20 +69,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadData();
-        curDate = "2020624";
+        Calendar calendar = Calendar.getInstance();
+        curDate = Integer.toString(calendar.get(Calendar.YEAR))+Integer.toString(calendar.get(Calendar.MONTH)+1)
+                + Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
         SetIndex();
         calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-
                 curYear = String.valueOf(year);
                 curMonth = String.valueOf(month + 1);
                 curDay = String.valueOf(dayOfMonth);
                 curDate = curYear + curMonth + curDay;
                 mListView = (ListView) findViewById(R.id.list);
                 SetIndex();
-
                 mListView.setAdapter(new MyAdapter());
             }
         });
@@ -86,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new MyAdapter());
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this,"你长按的是第"+(position+1)+"条数据",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        this.registerForContextMenu(this.mListView);
         incometextview = findViewById(R.id.income);
         costtextview = findViewById(R.id.cost);
         moneytextview = findViewById(R.id.Moneytextview);
@@ -107,6 +119,16 @@ public class MainActivity extends AppCompatActivity {
         costtextview.setText("支出:" + Cost);
 
     }
+    @Override
+    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        //設定選單內容
+        super.onCreateContextMenu(contextMenu, view, menuInfo);
+        contextMenu.add(0, 0, 0, "紅茶");
+        contextMenu.add(0, 1, 0, "奶茶");
+        contextMenu.add(0, 2, 0, "綠茶");
+        contextMenu.add(0, 3, 0, "青茶");
+    }
+
     public void  SaveData(){
         Gson gson = new Gson();
         SharedPreferences sharedPreferences = getSharedPreferences("kind",MODE_PRIVATE);
