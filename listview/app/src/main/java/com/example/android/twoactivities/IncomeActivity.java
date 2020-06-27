@@ -4,6 +4,8 @@ package com.example.android.twoactivities;
         import android.media.TimedText;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
+        import android.support.v7.widget.Toolbar;
+        import android.view.MenuItem;
         import android.view.View;
         import android.widget.EditText;
         import android.widget.Spinner;
@@ -29,8 +31,21 @@ public class IncomeActivity extends AppCompatActivity {
         kind = getResources().getStringArray(R.array.incomedarray);
         remark = findViewById(R.id.remark);
         account = getResources().getStringArray(R.array.accountArray);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
+    }
     public void SaveIncomeData(View view) {
         String Kind = kind[incomeKind.getSelectedItemPosition()];
         String Price = price.getText().toString();

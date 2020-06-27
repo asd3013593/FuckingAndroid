@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 public class ListActivity extends AppCompatActivity {
     private TextView moneytextview;
     private ListView mListView;
+    private Toolbar toolbar;
     private ArrayList<String> kindArray ;
     private ArrayList<String> moneyArray;
     private ArrayList<String> accountArray;
@@ -29,6 +32,8 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         Intent intent = getIntent();
         moneyArray = intent.getStringArrayListExtra("moneyArray");
         kindArray = intent.getStringArrayListExtra("kindArray");
@@ -38,6 +43,20 @@ public class ListActivity extends AppCompatActivity {
         colorArray = intent.getIntegerArrayListExtra("colorArray");
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new ListActivity.MyAdapter());
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
     }
     public class MyAdapter extends BaseAdapter {
         @Override

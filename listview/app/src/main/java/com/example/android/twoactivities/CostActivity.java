@@ -18,10 +18,13 @@ package com.example.android.twoactivities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 public class CostActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY =
             "com.example.android.twoactivities.extra.REPLY";
@@ -37,12 +40,28 @@ public class CostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cost);
         price = findViewById(R.id.editText_money);
-        costKind = (Spinner)findViewById(R.id.CostedKind);
+        costKind = (Spinner)findViewById(R.id.EditKind);
         accountKind = (Spinner)findViewById(R.id.accountKind);
         remark = findViewById(R.id.remark);
         kind = getResources().getStringArray(R.array.costedarray);
         account = getResources().getStringArray(R.array.accountArray);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public static int isNumeric(String str){
         if(str.length() == 0)
             return 1;
