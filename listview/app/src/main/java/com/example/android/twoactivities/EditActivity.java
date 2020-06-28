@@ -1,6 +1,7 @@
 package com.example.android.twoactivities;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +32,8 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         Intent intent = getIntent();
+        Bundle bundle = this.getIntent().getExtras();
+        //Log.d("asd",Data.get(0).get(0));
         position = intent.getIntExtra("position",0);
         color = intent.getIntExtra("color",0);
         title = (TextView) findViewById(R.id.textView);

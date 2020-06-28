@@ -1,10 +1,10 @@
 package com.example.android.twoactivities;
 
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,28 +19,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
-    private TextView moneytextview;
     private ListView mListView;
-    private Toolbar toolbar;
-    private ArrayList<String> kindArray ;
-    private ArrayList<String> moneyArray;
-    private ArrayList<String> accountArray;
-    private ArrayList<String> remarkArray;
-    private ArrayList<String> dateArray;
-    private ArrayList<Integer> colorArray ; //0 == red,1 == blue;
+    private ArrayList<ArrayList<String>> Data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-        Intent intent = getIntent();
-        moneyArray = intent.getStringArrayListExtra("moneyArray");
-        kindArray = intent.getStringArrayListExtra("kindArray");
-        accountArray = intent.getStringArrayListExtra("accountArray");
-        remarkArray = intent.getStringArrayListExtra("remarkArray");
-        dateArray = intent.getStringArrayListExtra("dateArray");
-        colorArray = intent.getIntegerArrayListExtra("colorArray");
+        Data = (ArrayList<ArrayList<String>>) getIntent().getSerializableExtra("data");
         mListView = (ListView) findViewById(R.id.list);
         mListView.setAdapter(new ListActivity.MyAdapter());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -52,7 +37,6 @@ public class ListActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             finish(); // close this activity and return to preview activity (if there is any)
         }
@@ -61,7 +45,7 @@ public class ListActivity extends AppCompatActivity {
     public class MyAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return kindArray.size();
+            return Data.size();
         }
         @Override
         public Object getItem(int position) {
@@ -88,17 +72,17 @@ public class ListActivity extends AppCompatActivity {
             } else {
                 holder = (Holder) v.getTag();
             }
-            holder.text1.setText(kindArray.get(position));
-            holder.text3.setText(accountArray.get(position));
-            holder.text4.setText(remarkArray.get(position));
-            holder.text5.setText(dateArray.get(position));
-            if (colorArray.get(position) == 0) {
+            holder.text1.setText(Data.get(position).get(2));
+            holder.text3.setText(Data.get(position).get(4));
+            holder.text4.setText(Data.get(position).get(5));
+            holder.text5.setText(Data.get(position).get(0));
+            if (Data.get(position).get(1).equals("cost")) {
                 holder.text1.setTextColor(Color.RED);
-                holder.text2.setText("-$" + moneyArray.get(position));
+                holder.text2.setText("-$" + Data.get(position).get(3));
                 holder.text2.setTextColor(Color.RED);
-            } else if (colorArray.get(position) == 1) {
+            } else if (Data.get(position).get(1).equals("income")) {
                 holder.text1.setTextColor(Color.BLUE);
-                holder.text2.setText("+$" + moneyArray.get(position));
+                holder.text2.setText("+$" + Data.get(position).get(3));
                 holder.text2.setTextColor(Color.BLUE);
             }
             return v;

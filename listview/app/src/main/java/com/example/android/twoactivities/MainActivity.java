@@ -57,9 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE
             = "com.example.android.twoactivities.extra.MESSAGE";
     public static final int TEXT_REQUEST = 1;
-    private EditText mMessageEditText;
-    private TextView mReplyHeadTextView;
-    private TextView moneytextview,incometextview,costtextview;
+    private TextView moneytextview;
     private Toolbar toolbar;
     private ListView mListView;
     private ImageView imageView;
@@ -68,14 +66,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton imageButton;
     private int totalmoney,income,cost,index,position = 0;
     private String curYear,curMonth,curDay,curDate;
+    private ArrayList<ArrayList<String>>Data;
     private ArrayList<Integer> Date ;
     private ArrayList<String> EditArray;
-    private ArrayList<String> kindArray ;
-    private ArrayList<String> moneyArray;
-    private ArrayList<String> accountArray;
-    private ArrayList<String> remarkArray;
-    private ArrayList<String> dateArray;
-    private ArrayList<Integer> colorArray; //0 == red,1 == blue;
     private CalendarView calendarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,28 +109,12 @@ public class MainActivity extends AppCompatActivity {
                 costList.setSelected(false);
             }
         });
-        costList.setSelected(false);
-        costList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                schedule.setSelected(false);
-                costList.setSelected(true);
-                Intent intent = new Intent(MainActivity.this,ListActivity.class);
-                intent.putStringArrayListExtra("kindArray",kindArray);
-                intent.putStringArrayListExtra("moneyArray",moneyArray);
-                intent.putStringArrayListExtra("accountArray",accountArray);
-                intent.putStringArrayListExtra("remarkArray",remarkArray);
-                intent.putStringArrayListExtra("dateArray",dateArray);
-                intent.putIntegerArrayListExtra("colorArray",colorArray);
-                startActivity(intent);
-            }
-        });
-        for(int i=0;i<moneyArray.size();i++){
-            if(colorArray.get(i) == 0) {
-                cost -= Integer.parseInt(moneyArray.get(i));
+        for(int i=0;i<Data.size();i++){
+            if(Data.get(i).get(1).equals("cost")) {
+                cost -= Integer.parseInt(Data.get(i).get(3));
             }
             else{
-                income += Integer.parseInt(moneyArray.get(i));
+                income += Integer.parseInt(Data.get(i).get(3));
             }
         }
         String Cost = String.valueOf(cost);
@@ -153,110 +130,44 @@ public class MainActivity extends AppCompatActivity {
     }
     public void  SaveData(){
         Gson gson = new Gson();
-        SharedPreferences sharedPreferences = getSharedPreferences("kind",MODE_PRIVATE);
-        SharedPreferences sharedPreferences1 = getSharedPreferences("money",MODE_PRIVATE);
-        SharedPreferences sharedPreferences2 = getSharedPreferences("color",MODE_PRIVATE);
-        SharedPreferences sharedPreferences3 = getSharedPreferences("account",MODE_PRIVATE);
-        SharedPreferences sharedPreferences4 = getSharedPreferences("remark",MODE_PRIVATE);
         SharedPreferences sharedPreferences5 = getSharedPreferences("total",MODE_PRIVATE);
-        SharedPreferences sharedPreferences6 = getSharedPreferences("date",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        SharedPreferences.Editor moneyEditor = sharedPreferences1.edit();
-        SharedPreferences.Editor colorEditor = sharedPreferences2.edit();
-        SharedPreferences.Editor accountEditor = sharedPreferences3.edit();
-        SharedPreferences.Editor remarkEditor = sharedPreferences4.edit();
+        SharedPreferences sharedPreferences7 = getSharedPreferences("data",MODE_PRIVATE);
         SharedPreferences.Editor totalEditor = sharedPreferences5.edit();
-        SharedPreferences.Editor dateEditor = sharedPreferences6.edit();
-        String json = gson.toJson(kindArray);
-        String moneyJson = gson.toJson(moneyArray);
-        String colorJson = gson.toJson(colorArray);
-        String accountJson = gson.toJson(accountArray);
-        String remarkJson = gson.toJson(remarkArray);
-        String dateJson = gson.toJson(dateArray);
-        editor.putString("kind",json);
-        moneyEditor.putString("money",moneyJson);
-        colorEditor.putString("color",colorJson);
-        accountEditor.putString("account",accountJson);
-        remarkEditor.putString("remark",remarkJson);
+        SharedPreferences.Editor dataEditor = sharedPreferences7.edit();
+        String dataJson = gson.toJson(Data);
         totalEditor.putInt("total",totalmoney);
-        dateEditor.putString("date",dateJson);
-        editor.apply();
-        moneyEditor.apply();
-        colorEditor.apply();
-        accountEditor.apply();
-        remarkEditor.apply();
+        dataEditor.putString("data",dataJson);
         totalEditor.commit();
-        dateEditor.apply();
+        dataEditor.apply();
     }
     public void  LoadData(){
         Gson gson = new Gson();
-        SharedPreferences sharedPreferences = getSharedPreferences("kind",MODE_PRIVATE);
-        SharedPreferences sharedPreferences1 = getSharedPreferences("money",MODE_PRIVATE);
-        SharedPreferences sharedPreferences2 = getSharedPreferences("color",MODE_PRIVATE);
-        SharedPreferences sharedPreferences3 = getSharedPreferences("account",MODE_PRIVATE);
-        SharedPreferences sharedPreferences4 = getSharedPreferences("remark",MODE_PRIVATE);
         SharedPreferences sharedPreferences5 = getSharedPreferences("total",MODE_PRIVATE);
-        SharedPreferences sharedPreferences6 = getSharedPreferences("date",MODE_PRIVATE);
-        String json = sharedPreferences.getString("kind",null);
-        String moneyJson = sharedPreferences1.getString("money",null);
-        String colorJson = sharedPreferences2.getString("color",null);
-        String accountJson = sharedPreferences3.getString("account",null);
-        String remarkJson = sharedPreferences4.getString("remark",null);
-        String dateJson = sharedPreferences6.getString("date",null);
-        Type type = new TypeToken<ArrayList<String>>(){}.getType();
-        Type type1 = new TypeToken<ArrayList<String>>(){}.getType();
-        Type type2 = new TypeToken<ArrayList<Integer>>(){}.getType();
-        Type type3 = new TypeToken<ArrayList<String>>(){}.getType();
-        Type type4 = new TypeToken<ArrayList<String>>(){}.getType();
-        Type type5 = new TypeToken<ArrayList<String>>(){}.getType();
-        kindArray = gson.fromJson(json,type);
-        moneyArray = gson.fromJson(moneyJson,type1);
-        colorArray = gson.fromJson(colorJson,type2);
-        accountArray = gson.fromJson(accountJson,type3);
-        remarkArray = gson.fromJson(remarkJson,type4);
+        SharedPreferences sharedPreferences7 = getSharedPreferences("data",MODE_PRIVATE);
+        String dataJson = sharedPreferences7.getString("data",null);
+        Type dataType = new TypeToken<ArrayList<ArrayList<String>>>(){}.getType();
         totalmoney = sharedPreferences5.getInt("total",0);
-        dateArray = gson.fromJson(dateJson,type5);
-        if(kindArray == null){
-            kindArray = new ArrayList<String>();
-        }
-        if(moneyArray == null){
-            moneyArray = new ArrayList<String>();
-        }
-        if(colorArray == null){
-            colorArray = new ArrayList<Integer>();
-        }
-        if(accountArray == null){
-            accountArray = new ArrayList<String>();
-        }
-        if(remarkArray == null){
-            remarkArray = new ArrayList<String>();
-        }
-        if(dateArray == null){
-            Log.d("qwe","qwe");
-            dateArray = new ArrayList<String>();
+        Data = gson.fromJson(dataJson,dataType);
+        if(Data == null){
+            Data = new ArrayList<ArrayList<String>>();
         }
     }
     public void  DeleteData(int position){
-        int money = Integer.parseInt(moneyArray.get(position));
-        if(colorArray.get(position) == 0) totalmoney += money;
+        int money = Integer.parseInt(Data.get(position).get(3));
+        if(Data.get(position).get(1).equals("cost")) totalmoney += money;
         else totalmoney -= money;
-        kindArray.remove(position);
-        moneyArray.remove(position);
-        remarkArray.remove(position);
-        dateArray.remove(position);
-        accountArray.remove(position);
-        colorArray.remove(position);
+        Data.remove(position);
         Show();
     }
     public void Show(){
         cost = 0;
         income = 0;
-        for(int i=0;i<moneyArray.size();i++){
-            if(colorArray.get(i) == 0) {
-                cost -= Integer.parseInt(moneyArray.get(i));
+        for(int i=0;i<Data.size();i++){
+            if(Data.get(i).get(1).equals("cost")) {
+                cost -= Integer.parseInt(Data.get(i).get(3));
             }
             else{
-                income += Integer.parseInt(moneyArray.get(i));
+                income += Integer.parseInt(Data.get(i).get(3));
             }
         }
         SetIndex();
@@ -274,17 +185,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void ShowListPage(View view){
         Intent intent = new Intent(this,ListActivity.class);
-        intent.putStringArrayListExtra("kindArray",kindArray);
-        intent.putStringArrayListExtra("moneyArray",moneyArray);
-        intent.putStringArrayListExtra("accountArray",accountArray);
-        intent.putStringArrayListExtra("remarkArray",remarkArray);
-        intent.putStringArrayListExtra("dateArray",dateArray);
-        intent.putIntegerArrayListExtra("colorArray",colorArray);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data",Data);
+        intent.putExtras(bundle);
         startActivity(intent);
-    }
-    public void setSchedule (View view){
-        sceduleDisplay = true;
-        mListView.setAdapter(new MyAdapter());
     }
     public void setScheduleList(View view){
         sceduleDisplay = false;
@@ -298,59 +202,57 @@ public class MainActivity extends AppCompatActivity {
     public void SetIndex(){
         index = 0;
         Date = new ArrayList<Integer>();
-        for (int i = 0; i < kindArray.size(); i++) {
-            if (dateArray.get(i).equals(curDate)) {
+        for (int i =0 ; i<Data.size();i++){
+            if((Data.get(i).get(0)).equals(curDate)){
+                Log.d("data",(Data.get(i).get(0)));
                 index += 1;
-                Date.add((i));
+                Date.add(i);
             }
         }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        CostListData costListData = new CostListData();
         EditArray = new ArrayList<String>();
+        ArrayList<String> storge = new ArrayList<String>();
+        CostListData costListData = new CostListData();
         IncomeListData incomeListData = new IncomeListData();
         if (requestCode == 123) {
             costListData = (CostListData) data.getSerializableExtra("CostListData");
-        }
-        if (requestCode == 456) {
-            incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
-        }
-        if(requestCode == 789){
-            position = data.getIntExtra("position",0);
-            EditArray = data.getStringArrayListExtra("data");
-        }
-        if(costListData.getArray().size() != 0){
             String dater = curDate;
             int j = Integer.parseInt(costListData.getArray().get(costListData.getArray().size()-1).Price);
             String s = String.valueOf(j);
-            kindArray.add(costListData.getArray().get(costListData.getArray().size()-1).Kind);
-            accountArray.add(costListData.getArray().get(costListData.getArray().size()-1).Account);
-            remarkArray.add(costListData.getArray().get(costListData.getArray().size()-1).Remark);
-            dateArray.add(dater);
-            moneyArray.add(s);
-            colorArray.add(0);
+            storge.add(dater);
+            storge.add("cost");
+            storge.add(costListData.getArray().get(costListData.getArray().size()-1).Kind);
+            storge.add(costListData.getArray().get(costListData.getArray().size()-1).Price);
+            storge.add(costListData.getArray().get(costListData.getArray().size()-1).Account);
+            storge.add(costListData.getArray().get(costListData.getArray().size()-1).Remark);
+            Data.add(storge);
             totalmoney -=j;
         }
-        else if(incomeListData.getArray().size() != 0){
+        else if (requestCode == 456) {
+            incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
             int j = Integer.parseInt(incomeListData.getArray().get(incomeListData.getArray().size()-1).Price);
             String s = String.valueOf(j);
-            kindArray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Kind);
-            accountArray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Account);
-            remarkArray.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Remark);
-            dateArray.add(curDate);
-            moneyArray.add(s);
-            colorArray.add(1);
+            storge.add(curDate);
+            storge.add("income");
+            storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Kind);
+            storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Price);
+            storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Account);
+            storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Remark);
+            Data.add(storge);
             totalmoney +=j;
         }
-        else if(EditArray.size() != 0){
-            int money = Integer.parseInt(EditArray.get(1)) - Integer.parseInt(moneyArray.get(position));
-            kindArray.set(position,EditArray.get(0));
-            moneyArray.set(position,EditArray.get(1));
-            accountArray.set(position,EditArray.get(2));
-            remarkArray.set(position,EditArray.get(3));
-            if(colorArray.get(position) == 0) totalmoney -= money;
+        else if(requestCode == 789){
+            position = data.getIntExtra("position",0);
+            EditArray = data.getStringArrayListExtra("data");
+            int money = Integer.parseInt(EditArray.get(1)) - Integer.parseInt(Data.get(position).get(3));
+            Data.get(position).set(2,EditArray.get(0));
+            Data.get(position).set(3,EditArray.get(1));
+            Data.get(position).set(4,EditArray.get(2));
+            Data.get(position).set(5,EditArray.get(3));
+            if(Data.get(position).get(1).equals("cost")) totalmoney -= money;
             else totalmoney += money;
         }
         Show();
@@ -360,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
             public int getCount() {
                 if(!sceduleDisplay)return index;
                 else {
-                    return kindArray.size();
+                    return Data.size();
                 }
             }
             @Override
@@ -391,37 +293,33 @@ public class MainActivity extends AppCompatActivity {
                 holder.imageButton1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final String[] action = {"編輯","刪除"};
+                        final String[] action = {"編輯", "刪除"};
                         AlertDialog.Builder customizeDialog =
                                 new AlertDialog.Builder(MainActivity.this);
                         final View dialogView = LayoutInflater.from(MainActivity.this)
-                                .inflate(R.layout.dialog_list,null);
+                                .inflate(R.layout.dialog_list, null);
 //                        customizeDialog.setView(dialogView);
-                        customizeDialog.setItems(action, new DialogInterface.OnClickListener(){
+                        customizeDialog.setItems(action, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // TODO Auto-generated method stub
                                 int index = 0;
                                 int arrayPosition = 0;
                                 Toast.makeText(MainActivity.this, "你選的是" + action[which], Toast.LENGTH_SHORT).show();
-                                for(int i = 0; i< dateArray.size();i++)
-                                {
-                                    if(dateArray.get(i).equals(curDate)) {
+                                for (int i = 0; i < Data.size(); i++) {
+                                    if (Data.get(i).get(0).equals(curDate)) {
                                         if (index == position) {
-                                            Log.d("qwe", dateArray.get(i));
                                             break;
-                                        }
-                                        else index += 1;
+                                        } else index += 1;
                                     }
                                     arrayPosition += 1;
                                 }
-                                if(action[which].equals("編輯")){
+                                if (action[which].equals("編輯")) {
                                     Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                                    intent.putExtra("position",arrayPosition);
-                                    intent.putExtra("color",colorArray.get(arrayPosition));
-                                    startActivityForResult(intent,789);
-                                }
-                                else if(action[which].equals("刪除")) {
+                                    intent.putExtra("position", arrayPosition);
+                                    intent.putExtra("color", Data.get(arrayPosition).get(1));
+                                    startActivityForResult(intent, 789);
+                                } else if (action[which].equals("刪除")) {
                                     DeleteData(arrayPosition);
                                 }
                             }
@@ -430,32 +328,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 if (!sceduleDisplay) {
-                    Log.d("123",Integer.toString(moneyArray.size()));
-                    if(moneyArray.size() != 0) {
-                        holder.text1.setText(kindArray.get(Date.get(position)));
-                        holder.text3.setText(accountArray.get(Date.get(position)));
-                        holder.text4.setText(remarkArray.get(Date.get(position)));
-                        if (colorArray.get(Date.get(position)) == 0) {
-                            holder.text2.setText("-$" + moneyArray.get(Date.get(position)));
+                    Log.d("1234", "1234");
+                    if (Data.size() != 0) {
+                        holder.text1.setText(Data.get(Date.get(position)).get(2));
+                        holder.text3.setText(Data.get(Date.get(position)).get(4));
+                        holder.text4.setText(Data.get(Date.get(position)).get(5));
+                        if (Data.get(Date.get(position)).get(1).equals("cost")) {
+                            holder.text2.setText("-$" + Data.get(Date.get(position)).get(3));
                             holder.text2.setTextColor(Color.RED);
-                        } else if (colorArray.get(Date.get(position)) == 1) {
-                            holder.text2.setText("+$" + moneyArray.get(Date.get(position)));
+                        } else if (Data.get(Date.get(position)).get(1).equals("income")) {
+                            holder.text2.setText("+$" + Data.get(Date.get(position)).get(3));
                             holder.text2.setTextColor(Color.BLUE);
                         }
                     }
-              }
-                else {
-                    holder.text1.setText(kindArray.get(position));
-                    holder.text3.setText(accountArray.get(position));
-                    holder.text4.setText(remarkArray.get(position));
-                    if (colorArray.get(position) == 0) {
-                        holder.text2.setText("-$" + moneyArray.get(position));
-                        holder.text2.setTextColor(Color.RED);
-                    } else if (colorArray.get(position) == 1) {
-                        holder.text2.setText("+$" + moneyArray.get(position));
-                        holder.text2.setTextColor(Color.BLUE);
-                    }
-               }
+                }
                 return v;
             }
         }
