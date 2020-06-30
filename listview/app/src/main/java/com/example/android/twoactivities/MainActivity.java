@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Button schedule, costList;
     private Boolean sceduleDisplay = false;
     private ImageButton imageButton;
-    private int totalmoney,income,cost,index,position = 0;
+    private int income,cost,index,position = 0;
     private String curYear,curMonth,curDay,curDate;
     private ArrayList<ArrayList<String>>Data;
     private ArrayList<Integer> Date ;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
         //imageView.setImageResource(R.drawable.ic_launcher_background);
                 Calendar calendar = Calendar.getInstance();
-        curDate = Integer.toString(calendar.get(Calendar.YEAR))+Integer.toString(calendar.get(Calendar.MONTH)+1)
+        curDate = Integer.toString(calendar.get(Calendar.YEAR)) + "0" +Integer.toString(calendar.get(Calendar.MONTH)+1)
                 + Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
         SetIndex();
         calendarView = findViewById(R.id.calendarView);
@@ -88,12 +88,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 curYear = String.valueOf(year);
-                curMonth = String.valueOf(month + 1);
-                curDay = String.valueOf(dayOfMonth);
+//                curMonth = String.valueOf(month + 1);
+//                curDay = String.valueOf(dayOfMonth);
+                if( (month+1) < 10) curMonth = "0" + String.valueOf(month + 1);
+                else curMonth = String.valueOf(month + 1);
+                if( (dayOfMonth+1) < 10) curDay = "0" + String.valueOf(dayOfMonth);
+                else curDay = String.valueOf(dayOfMonth);
                 curDate = curYear + curMonth + curDay;
                 mListView = (ListView) findViewById(R.id.list);
                 SetIndex();
                 mListView.setAdapter(new MyAdapter());
+                Show();
             }
         });
         mListView = (ListView) findViewById(R.id.list);
@@ -109,18 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 costList.setSelected(false);
             }
         });
-        for(int i=0;i<Data.size();i++){
-            if(Data.get(i).get(1).equals("cost")) {
-                cost -= Integer.parseInt(Data.get(i).get(3));
-            }
-            else{
-                income += Integer.parseInt(Data.get(i).get(3));
-            }
-        }
-        String Cost = String.valueOf(cost);
-        String Income = String.valueOf(income);
-        String s3 = String.valueOf(totalmoney);
-        moneytextview.setText(" 收入:" + Income + "  支出:" + Cost+"  淨資產:" + s3);
+        Show();
     }
     @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo menuInfo) {
@@ -132,51 +126,47 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         SharedPreferences sharedPreferences5 = getSharedPreferences("total",MODE_PRIVATE);
         SharedPreferences sharedPreferences7 = getSharedPreferences("data",MODE_PRIVATE);
-        SharedPreferences.Editor totalEditor = sharedPreferences5.edit();
         SharedPreferences.Editor dataEditor = sharedPreferences7.edit();
         String dataJson = gson.toJson(Data);
-        totalEditor.putInt("total",totalmoney);
         dataEditor.putString("data",dataJson);
-        totalEditor.commit();
         dataEditor.apply();
     }
     public void  LoadData(){
         Gson gson = new Gson();
-        SharedPreferences sharedPreferences5 = getSharedPreferences("total",MODE_PRIVATE);
         SharedPreferences sharedPreferences7 = getSharedPreferences("data",MODE_PRIVATE);
         String dataJson = sharedPreferences7.getString("data",null);
         Type dataType = new TypeToken<ArrayList<ArrayList<String>>>(){}.getType();
-        totalmoney = sharedPreferences5.getInt("total",0);
         Data = gson.fromJson(dataJson,dataType);
         if(Data == null){
             Data = new ArrayList<ArrayList<String>>();
         }
     }
     public void  DeleteData(int position){
-        int money = Integer.parseInt(Data.get(position).get(3));
-        if(Data.get(position).get(1).equals("cost")) totalmoney += money;
-        else totalmoney -= money;
         Data.remove(position);
         Show();
     }
     public void Show(){
         cost = 0;
         income = 0;
+        int totalmoney = 0;
         for(int i=0;i<Data.size();i++){
-            if(Data.get(i).get(1).equals("cost")) {
-                cost -= Integer.parseInt(Data.get(i).get(3));
-            }
-            else{
-                income += Integer.parseInt(Data.get(i).get(3));
+            if(Data.get(i).get(0).equals(curDate)) {
+                if (Data.get(i).get(1).equals("cost")) {
+                    cost -= Integer.parseInt(Data.get(i).get(3));
+                } else {
+                    income += Integer.parseInt(Data.get(i).get(3));
+                }
             }
         }
+        totalmoney = cost+income;
         SetIndex();
         SaveData();
         String Cost = String.valueOf(cost);
         String Income = String.valueOf(income);
         String s3 = String.valueOf(totalmoney);
         mListView.setAdapter(new MyAdapter());
-        moneytextview.setText(" 收入:" + Income + "  支出:" + Cost+"  淨資產:" + s3);
+        if(cost == 0 && income == 0) moneytextview.setText(" 沒有紀錄，按「收入」或「支出」新增紀錄。");
+        else moneytextview.setText(" 收入:" + Income + "  支出:" + Cost+"  淨資產:" + s3);
     }
     public void launchExpendActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
@@ -184,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 123);
     }
     public void ShowListPage(View view){
+        costList.setSelected(true);
+        schedule.setSelected(false);
         Intent intent = new Intent(this,ListActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("data",Data);
@@ -225,11 +217,10 @@ public class MainActivity extends AppCompatActivity {
             storge.add(dater);
             storge.add("cost");
             storge.add(costListData.getArray().get(costListData.getArray().size()-1).Kind);
-            storge.add(costListData.getArray().get(costListData.getArray().size()-1).Price);
+            storge.add(s);
             storge.add(costListData.getArray().get(costListData.getArray().size()-1).Account);
             storge.add(costListData.getArray().get(costListData.getArray().size()-1).Remark);
             Data.add(storge);
-            totalmoney -=j;
         }
         else if (requestCode == 456) {
             incomeListData = (IncomeListData) data.getSerializableExtra("IncomeListData");
@@ -238,11 +229,10 @@ public class MainActivity extends AppCompatActivity {
             storge.add(curDate);
             storge.add("income");
             storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Kind);
-            storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Price);
+            storge.add(s);
             storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Account);
             storge.add(incomeListData.getArray().get(incomeListData.getArray().size()-1).Remark);
             Data.add(storge);
-            totalmoney +=j;
         }
         else if(requestCode == 789){
             position = data.getIntExtra("position",0);
@@ -252,8 +242,6 @@ public class MainActivity extends AppCompatActivity {
             Data.get(position).set(3,EditArray.get(1));
             Data.get(position).set(4,EditArray.get(2));
             Data.get(position).set(5,EditArray.get(3));
-            if(Data.get(position).get(1).equals("cost")) totalmoney -= money;
-            else totalmoney += money;
         }
         Show();
     }

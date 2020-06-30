@@ -66,15 +66,19 @@ public class IncomeActivity extends AppCompatActivity {
             Toast.makeText(this,"請輸入金額",Toast.LENGTH_LONG).show();
         else if (isNumeric(Price) == 2)
             Toast.makeText(this,"請輸入正確金額",Toast.LENGTH_LONG).show();
+        else if (isNumeric(Price) == 3)
+            Toast.makeText(this,"首位數字不能為0",Toast.LENGTH_LONG).show();
     }
     public static int isNumeric(String str){
-        if(str.length() == 0)
+        if(str.length() == 0 )
             return 1;
         for (int i = str.length();--i>=0;){
             if (!Character.isDigit(str.charAt(i))){
                 return 2;
             }
         }
+        if(str.charAt(0) == '0')
+            return 3;
         return 0;
     }
 }

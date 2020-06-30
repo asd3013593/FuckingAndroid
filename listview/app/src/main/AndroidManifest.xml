@@ -22,7 +22,6 @@
         </activity>
         <activity
             android:name=".IncomeActivity"
-            android:label="收入"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -37,7 +36,6 @@
         </activity>
         <activity
             android:name=".CostActivity"
-            android:label="支出"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
